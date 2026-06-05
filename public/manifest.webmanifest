@@ -1,0 +1,11 @@
+{
+  "name": "Shalom Castelão",
+  "short_name": "Shalom",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1FB8DB",
+  "theme_color": "#1FB8DB",
+  "icons": [
+    { "src": "/__l5e/assets-v1/80b31332-6722-4240-ab7f-47431dcb8ba6/shalom-castelao-logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

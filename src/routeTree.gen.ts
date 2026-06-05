@@ -9,38 +9,111 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MTokenRouteImport } from './routes/m.$token'
+import { Route as MTokenCarrinhoRouteImport } from './routes/m.$token.carrinho'
+import { Route as MTokenProdutoIdRouteImport } from './routes/m.$token.produto.$id'
+import { Route as MTokenPedidoPedidoIdRouteImport } from './routes/m.$token.pedido.$pedidoId'
 
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MTokenRoute = MTokenRouteImport.update({
+  id: '/m/$token',
+  path: '/m/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MTokenCarrinhoRoute = MTokenCarrinhoRouteImport.update({
+  id: '/carrinho',
+  path: '/carrinho',
+  getParentRoute: () => MTokenRoute,
+} as any)
+const MTokenProdutoIdRoute = MTokenProdutoIdRouteImport.update({
+  id: '/produto/$id',
+  path: '/produto/$id',
+  getParentRoute: () => MTokenRoute,
+} as any)
+const MTokenPedidoPedidoIdRoute = MTokenPedidoPedidoIdRouteImport.update({
+  id: '/pedido/$pedidoId',
+  path: '/pedido/$pedidoId',
+  getParentRoute: () => MTokenRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/m/$token': typeof MTokenRouteWithChildren
+  '/m/$token/carrinho': typeof MTokenCarrinhoRoute
+  '/m/$token/pedido/$pedidoId': typeof MTokenPedidoPedidoIdRoute
+  '/m/$token/produto/$id': typeof MTokenProdutoIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/m/$token': typeof MTokenRouteWithChildren
+  '/m/$token/carrinho': typeof MTokenCarrinhoRoute
+  '/m/$token/pedido/$pedidoId': typeof MTokenPedidoPedidoIdRoute
+  '/m/$token/produto/$id': typeof MTokenProdutoIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/m/$token': typeof MTokenRouteWithChildren
+  '/m/$token/carrinho': typeof MTokenCarrinhoRoute
+  '/m/$token/pedido/$pedidoId': typeof MTokenPedidoPedidoIdRoute
+  '/m/$token/produto/$id': typeof MTokenProdutoIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/m/$token'
+    | '/m/$token/carrinho'
+    | '/m/$token/pedido/$pedidoId'
+    | '/m/$token/produto/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/m/$token'
+    | '/m/$token/carrinho'
+    | '/m/$token/pedido/$pedidoId'
+    | '/m/$token/produto/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/m/$token'
+    | '/m/$token/carrinho'
+    | '/m/$token/pedido/$pedidoId'
+    | '/m/$token/produto/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
+  MTokenRoute: typeof MTokenRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +121,57 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/m/$token': {
+      id: '/m/$token'
+      path: '/m/$token'
+      fullPath: '/m/$token'
+      preLoaderRoute: typeof MTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$token/carrinho': {
+      id: '/m/$token/carrinho'
+      path: '/carrinho'
+      fullPath: '/m/$token/carrinho'
+      preLoaderRoute: typeof MTokenCarrinhoRouteImport
+      parentRoute: typeof MTokenRoute
+    }
+    '/m/$token/produto/$id': {
+      id: '/m/$token/produto/$id'
+      path: '/produto/$id'
+      fullPath: '/m/$token/produto/$id'
+      preLoaderRoute: typeof MTokenProdutoIdRouteImport
+      parentRoute: typeof MTokenRoute
+    }
+    '/m/$token/pedido/$pedidoId': {
+      id: '/m/$token/pedido/$pedidoId'
+      path: '/pedido/$pedidoId'
+      fullPath: '/m/$token/pedido/$pedidoId'
+      preLoaderRoute: typeof MTokenPedidoPedidoIdRouteImport
+      parentRoute: typeof MTokenRoute
+    }
   }
 }
 
+interface MTokenRouteChildren {
+  MTokenCarrinhoRoute: typeof MTokenCarrinhoRoute
+  MTokenPedidoPedidoIdRoute: typeof MTokenPedidoPedidoIdRoute
+  MTokenProdutoIdRoute: typeof MTokenProdutoIdRoute
+}
+
+const MTokenRouteChildren: MTokenRouteChildren = {
+  MTokenCarrinhoRoute: MTokenCarrinhoRoute,
+  MTokenPedidoPedidoIdRoute: MTokenPedidoPedidoIdRoute,
+  MTokenProdutoIdRoute: MTokenProdutoIdRoute,
+}
+
+const MTokenRouteWithChildren =
+  MTokenRoute._addFileChildren(MTokenRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
+  MTokenRoute: MTokenRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
