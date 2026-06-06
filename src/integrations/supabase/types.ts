@@ -41,36 +41,18 @@ export type Database = {
           logo_url: string | null
           nome: string
           updated_at: string
-          whatsapp: string | null
-          endereco: string | null
-          cor_primaria: string | null
-          cor_secundaria: string | null
-          horario: string | null
-          onboarding_concluido: boolean | null
         }
         Insert: {
           id?: number
           logo_url?: string | null
           nome?: string
           updated_at?: string
-          whatsapp?: string | null
-          endereco?: string | null
-          cor_primaria?: string | null
-          cor_secundaria?: string | null
-          horario?: string | null
-          onboarding_concluido?: boolean | null
         }
         Update: {
           id?: number
           logo_url?: string | null
           nome?: string
           updated_at?: string
-          whatsapp?: string | null
-          endereco?: string | null
-          cor_primaria?: string | null
-          cor_secundaria?: string | null
-          horario?: string | null
-          onboarding_concluido?: boolean | null
         }
         Relationships: []
       }
