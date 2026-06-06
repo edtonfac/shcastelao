@@ -20,27 +20,23 @@ function CarrinhoPage() {
   async function enviar() {
     if (state.items.length === 0) return;
     setSending(true);
-    const { data: mesa } = await supabase.from("mesas").select("id").eq("qr_token", token).maybeSingle();
-    if (!mesa) { setSending(false); return toast.error("Mesa inválida"); }
-    const { data: pedido, error } = await supabase
-      .from("pedidos")
-      .insert({ mesa_id: mesa.id, total })
-      .select()
-      .single();
-    if (error || !pedido) { setSending(false); return toast.error(error?.message ?? "Erro ao enviar pedido"); }
-    const itens = state.items.map((i) => ({
-      pedido_id: pedido.id,
+    const payload = state.items.map((i) => ({
       produto_id: i.produto_id,
-      nome_produto: i.nome,
-      preco_unitario: i.preco,
       quantidade: i.quantidade,
       observacao: i.observacao ?? null,
     }));
-    const { error: e2 } = await supabase.from("itens_pedido").insert(itens);
-    if (e2) { setSending(false); return toast.error(e2.message); }
+    const { data, error } = await supabase.rpc("create_pedido_from_token", {
+      p_token: token,
+      p_items: payload,
+    });
+    if (error || !data?.[0]) {
+      setSending(false);
+      return toast.error(error?.message ?? "Erro ao enviar pedido");
+    }
+    const pedidoId = (data[0] as { pedido_id: string }).pedido_id;
     cart.clear();
     setSending(false);
-    nav({ to: "/m/$token/pedido/$pedidoId", params: { token, pedidoId: pedido.id } });
+    nav({ to: "/m/$token/pedido/$pedidoId", params: { token, pedidoId } });
   }
 
   return (
