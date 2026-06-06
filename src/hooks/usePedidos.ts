@@ -39,7 +39,9 @@ export function usePedidos(statusFilter?: StatusPedido | StatusPedido[]) {
         itens: (p.itens_pedido ?? []) as ItemPedido[],
       })) as PedidoComDetalhes[];
     },
-    staleTime: 5_000,
+    staleTime: 3_000,
+    refetchInterval: 4_000,
+    refetchOnWindowFocus: true,
   });
 }
 
