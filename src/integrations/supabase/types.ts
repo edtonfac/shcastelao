@@ -263,6 +263,32 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_pedido_from_token: {
+        Args: { p_items: Json; p_token: string }
+        Returns: {
+          numero: number
+          pedido_id: string
+        }[]
+      }
+      get_mesa_by_token: {
+        Args: { p_token: string }
+        Returns: {
+          ativa: boolean
+          id: string
+          nome: string
+          numero: number
+        }[]
+      }
+      get_pedido_status: {
+        Args: { p_pedido_id: string }
+        Returns: {
+          created_at: string
+          id: string
+          numero: number
+          status: Database["public"]["Enums"]["status_pedido"]
+          total: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
