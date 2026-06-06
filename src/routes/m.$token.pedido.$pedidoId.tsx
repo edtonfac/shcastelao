@@ -1,12 +1,10 @@
 import { createFileRoute, useParams, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Logo } from "@/components/Logo";
-import { Check, Loader2, ArrowLeft, RefreshCw, AlertTriangle, XCircle, ShoppingBag } from "lucide-react";
-import { useRealtime } from "@/hooks/useRealtime";
+import { Check, Loader2, ArrowLeft, AlertTriangle, XCircle, ShoppingBag } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatBRL } from "@/lib/cart";
 
 export const Route = createFileRoute("/m/$token/pedido/$pedidoId")({
@@ -24,25 +22,32 @@ const STEPS: { key: string; label: string; desc: string }[] = [
 
 function AcompanharPedido() {
   const { token, pedidoId } = useParams({ from: "/m/$token/pedido/$pedidoId" });
+  const [lastStatus, setLastStatus] = useState<string | null>(null);
 
-  const { data: pedido, isLoading, refetch } = useQuery({
+  // Customers access order data ONLY via the SECURITY DEFINER RPC get_pedido_status,
+  // which returns a minimal, safe projection (no mesa_id, garcom_id, item prices, etc.).
+  // Do NOT add a fallback to `supabase.from("pedidos")...` — anon has no SELECT on that
+  // table by design, and a fallback would create a parallel, unaudited access path.
+  // Use polling (3s) because anon cannot subscribe to Realtime channels for orders.
+  const { data: pedido, isLoading } = useQuery({
     queryKey: ["pedido-status", pedidoId],
     queryFn: async () => {
-      // Fetch status & details
       const { data, error } = await supabase.rpc("get_pedido_status", { p_pedido_id: pedidoId });
       if (error) throw error;
-      
-      if (!data || data.length === 0) {
-        // Try direct fetch if RPC has schema issues or returns empty
-        const { data: directData } = await supabase
-          .from("pedidos")
-          .select("*, itens_pedido(*)")
-          .eq("id", pedidoId)
-          .maybeSingle();
-        return directData;
+      const row = data?.[0] ?? null;
+      if (row && row.status !== lastStatus) {
+        if (lastStatus !== null) {
+          try {
+            const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/1435/1435-120.wav");
+            audio.volume = 0.4;
+            void audio.play();
+          } catch { /* ignore */ }
+        }
+        setLastStatus(row.status);
       }
-      return data[0];
+      return row;
     },
+    refetchInterval: 3000,
   });
 
   const { data: estab } = useQuery({
@@ -50,23 +55,6 @@ function AcompanharPedido() {
     queryFn: async () => {
       const { data } = await supabase.from("estabelecimento").select("*").eq("id", 1).maybeSingle();
       return data;
-    },
-  });
-
-  // Real-time listener for status changes
-  useRealtime({
-    table: "pedidos",
-    filter: `id=eq.${pedidoId}`,
-    onData: () => {
-      refetch();
-      // Play a quick subtle chime
-      try {
-        const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/1435/1435-120.wav");
-        audio.volume = 0.4;
-        audio.play();
-      } catch (e) {
-        console.warn(e);
-      }
     },
   });
 
