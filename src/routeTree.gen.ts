@@ -9,16 +9,42 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as GarcomRouteImport } from './routes/garcom'
+import { Route as CozinhaRouteImport } from './routes/cozinha'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as MTokenRouteImport } from './routes/m.$token'
+import { Route as AdminUsuariosRouteImport } from './routes/admin.usuarios'
+import { Route as AdminProdutosRouteImport } from './routes/admin.produtos'
+import { Route as AdminPedidosRouteImport } from './routes/admin.pedidos'
+import { Route as AdminOnboardingRouteImport } from './routes/admin.onboarding'
+import { Route as AdminMesasRouteImport } from './routes/admin.mesas'
+import { Route as AdminConfiguracoesRouteImport } from './routes/admin.configuracoes'
+import { Route as AdminCategoriasRouteImport } from './routes/admin.categorias'
 import { Route as MTokenCarrinhoRouteImport } from './routes/m.$token.carrinho'
 import { Route as MTokenProdutoIdRouteImport } from './routes/m.$token.produto.$id'
 import { Route as MTokenPedidoPedidoIdRouteImport } from './routes/m.$token.pedido.$pedidoId'
 
+const GarcomRoute = GarcomRouteImport.update({
+  id: '/garcom',
+  path: '/garcom',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CozinhaRoute = CozinhaRouteImport.update({
+  id: '/cozinha',
+  path: '/cozinha',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -26,10 +52,50 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const MTokenRoute = MTokenRouteImport.update({
   id: '/m/$token',
   path: '/m/$token',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminUsuariosRoute = AdminUsuariosRouteImport.update({
+  id: '/usuarios',
+  path: '/usuarios',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProdutosRoute = AdminProdutosRouteImport.update({
+  id: '/produtos',
+  path: '/produtos',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPedidosRoute = AdminPedidosRouteImport.update({
+  id: '/pedidos',
+  path: '/pedidos',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminOnboardingRoute = AdminOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminMesasRoute = AdminMesasRouteImport.update({
+  id: '/mesas',
+  path: '/mesas',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminConfiguracoesRoute = AdminConfiguracoesRouteImport.update({
+  id: '/configuracoes',
+  path: '/configuracoes',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCategoriasRoute = AdminCategoriasRouteImport.update({
+  id: '/categorias',
+  path: '/categorias',
+  getParentRoute: () => AdminRoute,
 } as any)
 const MTokenCarrinhoRoute = MTokenCarrinhoRouteImport.update({
   id: '/carrinho',
@@ -49,8 +115,19 @@ const MTokenPedidoPedidoIdRoute = MTokenPedidoPedidoIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
+  '/cozinha': typeof CozinhaRoute
+  '/garcom': typeof GarcomRoute
+  '/admin/categorias': typeof AdminCategoriasRoute
+  '/admin/configuracoes': typeof AdminConfiguracoesRoute
+  '/admin/mesas': typeof AdminMesasRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/pedidos': typeof AdminPedidosRoute
+  '/admin/produtos': typeof AdminProdutosRoute
+  '/admin/usuarios': typeof AdminUsuariosRoute
   '/m/$token': typeof MTokenRouteWithChildren
+  '/admin/': typeof AdminIndexRoute
   '/m/$token/carrinho': typeof MTokenCarrinhoRoute
   '/m/$token/pedido/$pedidoId': typeof MTokenPedidoPedidoIdRoute
   '/m/$token/produto/$id': typeof MTokenProdutoIdRoute
@@ -58,7 +135,17 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/cozinha': typeof CozinhaRoute
+  '/garcom': typeof GarcomRoute
+  '/admin/categorias': typeof AdminCategoriasRoute
+  '/admin/configuracoes': typeof AdminConfiguracoesRoute
+  '/admin/mesas': typeof AdminMesasRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/pedidos': typeof AdminPedidosRoute
+  '/admin/produtos': typeof AdminProdutosRoute
+  '/admin/usuarios': typeof AdminUsuariosRoute
   '/m/$token': typeof MTokenRouteWithChildren
+  '/admin': typeof AdminIndexRoute
   '/m/$token/carrinho': typeof MTokenCarrinhoRoute
   '/m/$token/pedido/$pedidoId': typeof MTokenPedidoPedidoIdRoute
   '/m/$token/produto/$id': typeof MTokenProdutoIdRoute
@@ -66,8 +153,19 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
+  '/cozinha': typeof CozinhaRoute
+  '/garcom': typeof GarcomRoute
+  '/admin/categorias': typeof AdminCategoriasRoute
+  '/admin/configuracoes': typeof AdminConfiguracoesRoute
+  '/admin/mesas': typeof AdminMesasRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/pedidos': typeof AdminPedidosRoute
+  '/admin/produtos': typeof AdminProdutosRoute
+  '/admin/usuarios': typeof AdminUsuariosRoute
   '/m/$token': typeof MTokenRouteWithChildren
+  '/admin/': typeof AdminIndexRoute
   '/m/$token/carrinho': typeof MTokenCarrinhoRoute
   '/m/$token/pedido/$pedidoId': typeof MTokenPedidoPedidoIdRoute
   '/m/$token/produto/$id': typeof MTokenProdutoIdRoute
@@ -76,8 +174,19 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/auth'
+    | '/cozinha'
+    | '/garcom'
+    | '/admin/categorias'
+    | '/admin/configuracoes'
+    | '/admin/mesas'
+    | '/admin/onboarding'
+    | '/admin/pedidos'
+    | '/admin/produtos'
+    | '/admin/usuarios'
     | '/m/$token'
+    | '/admin/'
     | '/m/$token/carrinho'
     | '/m/$token/pedido/$pedidoId'
     | '/m/$token/produto/$id'
@@ -85,15 +194,36 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/cozinha'
+    | '/garcom'
+    | '/admin/categorias'
+    | '/admin/configuracoes'
+    | '/admin/mesas'
+    | '/admin/onboarding'
+    | '/admin/pedidos'
+    | '/admin/produtos'
+    | '/admin/usuarios'
     | '/m/$token'
+    | '/admin'
     | '/m/$token/carrinho'
     | '/m/$token/pedido/$pedidoId'
     | '/m/$token/produto/$id'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/auth'
+    | '/cozinha'
+    | '/garcom'
+    | '/admin/categorias'
+    | '/admin/configuracoes'
+    | '/admin/mesas'
+    | '/admin/onboarding'
+    | '/admin/pedidos'
+    | '/admin/produtos'
+    | '/admin/usuarios'
     | '/m/$token'
+    | '/admin/'
     | '/m/$token/carrinho'
     | '/m/$token/pedido/$pedidoId'
     | '/m/$token/produto/$id'
@@ -101,17 +231,41 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
+  CozinhaRoute: typeof CozinhaRoute
+  GarcomRoute: typeof GarcomRoute
   MTokenRoute: typeof MTokenRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/garcom': {
+      id: '/garcom'
+      path: '/garcom'
+      fullPath: '/garcom'
+      preLoaderRoute: typeof GarcomRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cozinha': {
+      id: '/cozinha'
+      path: '/cozinha'
+      fullPath: '/cozinha'
+      preLoaderRoute: typeof CozinhaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -121,12 +275,68 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/m/$token': {
       id: '/m/$token'
       path: '/m/$token'
       fullPath: '/m/$token'
       preLoaderRoute: typeof MTokenRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/usuarios': {
+      id: '/admin/usuarios'
+      path: '/usuarios'
+      fullPath: '/admin/usuarios'
+      preLoaderRoute: typeof AdminUsuariosRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/produtos': {
+      id: '/admin/produtos'
+      path: '/produtos'
+      fullPath: '/admin/produtos'
+      preLoaderRoute: typeof AdminProdutosRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/pedidos': {
+      id: '/admin/pedidos'
+      path: '/pedidos'
+      fullPath: '/admin/pedidos'
+      preLoaderRoute: typeof AdminPedidosRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/onboarding': {
+      id: '/admin/onboarding'
+      path: '/onboarding'
+      fullPath: '/admin/onboarding'
+      preLoaderRoute: typeof AdminOnboardingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/mesas': {
+      id: '/admin/mesas'
+      path: '/mesas'
+      fullPath: '/admin/mesas'
+      preLoaderRoute: typeof AdminMesasRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/configuracoes': {
+      id: '/admin/configuracoes'
+      path: '/configuracoes'
+      fullPath: '/admin/configuracoes'
+      preLoaderRoute: typeof AdminConfiguracoesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/categorias': {
+      id: '/admin/categorias'
+      path: '/categorias'
+      fullPath: '/admin/categorias'
+      preLoaderRoute: typeof AdminCategoriasRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/m/$token/carrinho': {
       id: '/m/$token/carrinho'
@@ -152,6 +362,30 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminCategoriasRoute: typeof AdminCategoriasRoute
+  AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
+  AdminMesasRoute: typeof AdminMesasRoute
+  AdminOnboardingRoute: typeof AdminOnboardingRoute
+  AdminPedidosRoute: typeof AdminPedidosRoute
+  AdminProdutosRoute: typeof AdminProdutosRoute
+  AdminUsuariosRoute: typeof AdminUsuariosRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminCategoriasRoute: AdminCategoriasRoute,
+  AdminConfiguracoesRoute: AdminConfiguracoesRoute,
+  AdminMesasRoute: AdminMesasRoute,
+  AdminOnboardingRoute: AdminOnboardingRoute,
+  AdminPedidosRoute: AdminPedidosRoute,
+  AdminProdutosRoute: AdminProdutosRoute,
+  AdminUsuariosRoute: AdminUsuariosRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 interface MTokenRouteChildren {
   MTokenCarrinhoRoute: typeof MTokenCarrinhoRoute
   MTokenPedidoPedidoIdRoute: typeof MTokenPedidoPedidoIdRoute
@@ -169,7 +403,10 @@ const MTokenRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
+  CozinhaRoute: CozinhaRoute,
+  GarcomRoute: GarcomRoute,
   MTokenRoute: MTokenRouteWithChildren,
 }
 export const routeTree = rootRouteImport
