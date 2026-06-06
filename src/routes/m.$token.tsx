@@ -20,9 +20,9 @@ function ClienteMenu() {
   const mesaQ = useQuery({
     queryKey: ["mesa", token],
     queryFn: async () => {
-      const { data, error } = await supabase.from("mesas").select("*").eq("qr_token", token).maybeSingle();
+      const { data, error } = await supabase.rpc("get_mesa_by_token", { p_token: token });
       if (error) throw error;
-      return data;
+      return (data?.[0] ?? null) as { id: string; numero: number; nome: string | null; ativa: boolean } | null;
     },
   });
 
