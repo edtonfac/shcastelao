@@ -23,17 +23,12 @@ function AcompanharPedido() {
   useEffect(() => {
     let active = true;
     async function load() {
-      const { data } = await supabase.from("pedidos").select("id, numero, status").eq("id", pedidoId).maybeSingle();
-      if (active) setPedido(data as any);
+      const { data } = await supabase.rpc("get_pedido_status", { p_pedido_id: pedidoId });
+      if (active && data?.[0]) setPedido(data[0] as any);
     }
     load();
-    const ch = supabase
-      .channel("pedido-" + pedidoId)
-      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "pedidos", filter: `id=eq.${pedidoId}` }, (payload) => {
-        setPedido(payload.new as any);
-      })
-      .subscribe();
-    return () => { active = false; supabase.removeChannel(ch); };
+    const intv = setInterval(load, 3000);
+    return () => { active = false; clearInterval(intv); };
   }, [pedidoId]);
 
   if (!pedido) return <div className="flex min-h-screen items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>;
