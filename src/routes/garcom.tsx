@@ -11,6 +11,7 @@ import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
 import { Logo } from "@/components/Logo";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/garcom")({
   head: () => ({ meta: [{ title: "Painel do Garçom | Sistema de Pedidos" }] }),
@@ -135,7 +136,11 @@ function GarcomPage() {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => window.location.href = "/"}
+            onClick={async () => {
+              await supabase.auth.signOut();
+              toast.success("Sessão encerrada");
+              window.location.href = "/auth";
+            }}
             className="h-8 w-8 rounded-full text-muted-foreground"
           >
             <LogOut className="h-4 w-4" />
