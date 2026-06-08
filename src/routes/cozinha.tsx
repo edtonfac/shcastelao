@@ -11,6 +11,7 @@ import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
 import { Logo } from "@/components/Logo";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/cozinha")({
   head: () => ({ meta: [{ title: "Painel da Cozinha | Sistema de Pedidos" }] }),
@@ -207,7 +208,11 @@ function CozinhaPage() {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => window.location.href = "/"}
+            onClick={async () => {
+              await supabase.auth.signOut();
+              toast.success("Sessão encerrada");
+              window.location.href = "/auth";
+            }}
             className="text-slate-400 hover:text-white"
           >
             <LogOut className="mr-1.5 h-4 w-4" /> Sair
