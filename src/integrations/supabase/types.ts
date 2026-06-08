@@ -37,22 +37,40 @@ export type Database = {
       }
       estabelecimento: {
         Row: {
+          cor_primaria: string | null
+          cor_secundaria: string | null
+          endereco: string | null
+          horario: string | null
           id: number
           logo_url: string | null
           nome: string
+          onboarding_concluido: boolean | null
           updated_at: string
+          whatsapp: string | null
         }
         Insert: {
+          cor_primaria?: string | null
+          cor_secundaria?: string | null
+          endereco?: string | null
+          horario?: string | null
           id?: number
           logo_url?: string | null
           nome?: string
+          onboarding_concluido?: boolean | null
           updated_at?: string
+          whatsapp?: string | null
         }
         Update: {
+          cor_primaria?: string | null
+          cor_secundaria?: string | null
+          endereco?: string | null
+          horario?: string | null
           id?: number
           logo_url?: string | null
           nome?: string
+          onboarding_concluido?: boolean | null
           updated_at?: string
+          whatsapp?: string | null
         }
         Relationships: []
       }
